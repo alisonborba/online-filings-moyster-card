@@ -7,9 +7,7 @@ import { FareCappingService } from './services/FareCappingService';
  * Main fare calculation engine for MoysterCard
  */
 export class FareCalculationEngine {
-    /**
-     * Calculates the total fare for a list of journeys
-     */
+    // Calculates the total fare for a list of journeys
     calculateFare(journeys: Journey[]): FareCalculationResult {
         if (journeys.length === 0) {
             return new FareCalculationResult(
@@ -45,9 +43,7 @@ export class FareCalculationEngine {
         );
     }
 
-    /**
-     * Calculates individual journey fares with capping applied
-     */
+    // Calculates individual journey fares with capping applied
     private calculateIndividualJourneyFares(
         journeys: Journey[],
         weeklyCaps: Map<string, Fare>
@@ -110,9 +106,7 @@ export class FareCalculationEngine {
         return journeyFares;
     }
 
-    /**
-     * Calculates the total fare from individual journey fares
-     */
+    // Calculates the total fare from individual journey fares
     private calculateTotalFare(journeyFares: Map<string, Fare>): Fare {
         let total = Fare.zero();
         for (const fare of journeyFares.values()) {
@@ -121,9 +115,7 @@ export class FareCalculationEngine {
         return total;
     }
 
-    /**
-     * Groups journeys by week (Monday to Sunday)
-     */
+    // Groups journeys by week (Monday to Sunday)
     private groupJourneysByWeek(journeys: Journey[]): Map<string, Journey[]> {
         const grouped = new Map<string, Journey[]>();
 
@@ -140,9 +132,7 @@ export class FareCalculationEngine {
         return grouped;
     }
 
-    /**
-     * Gets the start of the week (Monday) for a given date
-     */
+    // Gets the start of the week (Monday) for a given date
     private getWeekStart(date: Date): Date {
         const day = date.getDay();
         const diff = date.getDate() - day + (day === 0 ? -6 : 1); // Adjust when day is Sunday
@@ -152,9 +142,7 @@ export class FareCalculationEngine {
         return weekStart;
     }
 
-    /**
-     * Generates a unique key for a journey
-     */
+    // Generates a unique key for a journey
     private getJourneyKey(journey: Journey): string {
         return `${journey.dateTime.toISOString()}-${journey.fromZone}-${journey.toZone}`;
     }

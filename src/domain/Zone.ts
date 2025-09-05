@@ -1,6 +1,4 @@
-/**
- * Represents a metro zone
- */
+// Represents a metro zone
 export enum Zone {
     ZONE_1 = 1,
     ZONE_2 = 2,
