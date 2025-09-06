@@ -41,8 +41,9 @@ export class Journey {
      */
     getDate(): Date {
         const date = new Date(this.dateTime);
-        date.setHours(0, 0, 0, 0);
-        return date;
+        // Use UTC methods to avoid timezone issues
+        const utcDate = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
+        return utcDate;
     }
 
     /**
