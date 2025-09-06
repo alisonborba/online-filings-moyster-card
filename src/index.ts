@@ -40,9 +40,7 @@ class MoysterCardApp {
     }
 
     run(): void {
-        console.log('process.argv.slice(2)', process.argv);
         const args = process.argv.slice(2);
-        console.log('args', args);
 
         if (args.length === 0) {
             console.log('Usage: npm start <input-file> [output-file]');
