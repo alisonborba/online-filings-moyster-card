@@ -23,14 +23,8 @@ export class FareCalculationEngine {
             a.dateTime.getTime() - b.dateTime.getTime()
         );
 
-        // Apply daily capping
-        const dailyCaps = FareCappingService.applyDailyCapping(sortedJourneys);
-
-        // Apply weekly capping
-        const weeklyCaps = FareCappingService.applyWeeklyCapping(dailyCaps, sortedJourneys);
-
         // Calculate individual journey fares with capping applied
-        const journeyFares = this.calculateIndividualJourneyFares(sortedJourneys, weeklyCaps);
+        const { journeyFares, dailyCaps, weeklyCaps } = this.calculateIndividualJourneyFares(sortedJourneys);
 
         // Calculate total fare
         const totalFare = this.calculateTotalFare(journeyFares);
@@ -45,9 +39,8 @@ export class FareCalculationEngine {
 
     // Calculates individual journey fares with capping applied
     private calculateIndividualJourneyFares(
-        journeys: Journey[],
-        weeklyCaps: Map<string, Fare>
-    ): Map<string, Fare> {
+        journeys: Journey[]
+    ): { journeyFares: Map<string, Fare>, dailyCaps: Map<string, Fare>, weeklyCaps: Map<string, Fare> } {
         const journeyFares = new Map<string, Fare>();
         const dailyTotals = new Map<string, Fare>();
         const weeklyTotals = new Map<string, Fare>();
@@ -103,7 +96,7 @@ export class FareCalculationEngine {
             weeklyTotals.set(weekKey, currentWeeklyTotal.add(weeklyCappedFare));
         }
 
-        return journeyFares;
+        return { journeyFares, dailyCaps: dailyTotals, weeklyCaps: weeklyTotals };
     }
 
     // Calculates the total fare from individual journey fares
