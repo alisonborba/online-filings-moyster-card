@@ -47,17 +47,17 @@ export class Journey {
     }
 
     /**
-     * Gets the day of week (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
+     * Gets the day of week (0 = Sunday, 1 = Monday, ..., 6 = Saturday) in UTC
      */
     getDayOfWeek(): number {
-        return this.dateTime.getDay();
+        return this.dateTime.getUTCDay();
     }
 
     /**
-     * Gets the time in minutes since midnight
+     * Gets the time in minutes since midnight (UTC)
      */
     getTimeInMinutes(): number {
-        return this.dateTime.getHours() * 60 + this.dateTime.getMinutes();
+        return this.dateTime.getUTCHours() * 60 + this.dateTime.getUTCMinutes();
     }
 
     /**
