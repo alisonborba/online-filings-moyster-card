@@ -1,0 +1,22 @@
+[
+  {
+    "dateTime": "2025-09-08T06:00:00Z",
+    "fromZone": 1,
+    "toZone": 1
+  },
+  {
+    "dateTime": "2025-09-08T08:00:00Z",
+    "fromZone": 1,
+    "toZone": 2
+  },
+  {
+    "dateTime": "2025-09-08T17:00:00Z",
+    "fromZone": 2,
+    "toZone": 1
+  },
+  {
+    "dateTime": "2025-09-08T18:00:00Z",
+    "fromZone": 1,
+    "toZone": 1
+  }
+]
