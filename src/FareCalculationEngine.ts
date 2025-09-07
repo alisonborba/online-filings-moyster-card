@@ -45,6 +45,16 @@ export class FareCalculationEngine {
         const dailyTotals = new Map<string, Fare>();
         const weeklyTotals = new Map<string, Fare>();
 
+        // Group journeys by day to determine applicable zone pair for daily capping
+        const journeysByDay = this.groupJourneysByDay(journeys);
+        const dailyZonePairs = new Map<string, any>();
+
+        for (const [dateKey, dayJourneys] of journeysByDay) {
+            const zonePairs = dayJourneys.map(j => j.getZonePair());
+            const applicableZonePair = FareCalculationService.getApplicableZonePairForCapping(zonePairs);
+            dailyZonePairs.set(dateKey, applicableZonePair);
+        }
+
         // Group journeys by week to determine applicable zone pair for weekly capping
         const journeysByWeek = this.groupJourneysByWeek(journeys);
         const weeklyZonePairs = new Map<string, any>();
@@ -69,9 +79,9 @@ export class FareCalculationEngine {
             // Get current weekly total
             const currentWeeklyTotal = weeklyTotals.get(weekKey) || Fare.zero();
 
-            // Get daily cap for this journey's zone pair
-            const zonePair = journey.getZonePair();
-            const dailyCap = FareCalculationService.getDailyCap(zonePair);
+            // Get daily cap for the applicable zone pair for this day
+            const dailyZonePair = dailyZonePairs.get(dateKey);
+            const dailyCap = FareCalculationService.getDailyCap(dailyZonePair);
 
             // Get weekly cap for the applicable zone pair for this week
             const weeklyZonePair = weeklyZonePairs.get(weekKey);
@@ -106,6 +116,22 @@ export class FareCalculationEngine {
             total = total.add(fare);
         }
         return total;
+    }
+
+    // Groups journeys by day
+    private groupJourneysByDay(journeys: Journey[]): Map<string, Journey[]> {
+        const grouped = new Map<string, Journey[]>();
+
+        for (const journey of journeys) {
+            const dateKey = journey.getDate().toISOString().split('T')[0];
+
+            if (!grouped.has(dateKey)) {
+                grouped.set(dateKey, []);
+            }
+            grouped.get(dateKey)!.push(journey);
+        }
+
+        return grouped;
     }
 
     // Groups journeys by week (Monday to Sunday)
